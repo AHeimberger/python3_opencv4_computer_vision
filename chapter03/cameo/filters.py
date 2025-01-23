@@ -92,6 +92,7 @@ def blend(foregroundSrc, backgroundSrc, dst, alphaMask):
     cv2.merge(backgroundChannels, dst)
 
 
+# decrease blurKsize when having performance problems
 def strokeEdges(src, dst, blurKsize=7, edgeKsize=5):
     if blurKsize >= 3:
         blurredSrc = cv2.medianBlur(src, blurKsize)
@@ -220,6 +221,8 @@ class VConvolutionFilter(object):
 class BlurFilter(VConvolutionFilter):
     """A blur filter with a 2-pixel radius."""
 
+    # the weights should sum up to 1
+    # should be positive throughout the neighborhood
     def __init__(self):
         kernel = numpy.array([[0.04, 0.04, 0.04, 0.04, 0.04],
                               [0.04, 0.04, 0.04, 0.04, 0.04],
@@ -231,6 +234,8 @@ class BlurFilter(VConvolutionFilter):
 class SharpenFilter(VConvolutionFilter):
     """A sharpen filter with a 1-pixel radius."""
 
+    # values in kernel sum up to 1
+    # should be the case if overall brightness is unchanged
     def __init__(self):
         kernel = numpy.array([[-1, -1, -1],
                               [-1,  9, -1],
@@ -240,6 +245,8 @@ class SharpenFilter(VConvolutionFilter):
 class FindEdgesFilter(VConvolutionFilter):
     """An edge-finding filter with a 1-pixel radius."""
 
+    # values in kernel sum up to 0
+    # turns edges white and non-edges black
     def __init__(self):
         kernel = numpy.array([[-1, -1, -1],
                               [-1,  8, -1],
@@ -249,6 +256,9 @@ class FindEdgesFilter(VConvolutionFilter):
 class EmbossFilter(VConvolutionFilter):
     """An emboss filter with a 1-pixel radius."""
 
+    # kernels with less symmetry produce interesting effects
+    # one side blurs (positive) other side sharpens (negative)
+    # produces a riged or embossed effect
     def __init__(self):
         kernel = numpy.array([[-2, -1, 0],
                               [-1,  1, 1],

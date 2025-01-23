@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import os
 
 camera = cv2.VideoCapture(0)
 
@@ -31,6 +32,9 @@ while (True):
     if key == ord("q"):
         break
     if key == ord("p"):
-        cv2.imwrite("skin.jpg", skin) 
+        if not os.path.exists("output"):
+            os.mkdir("output")
+
+        cv2.imwrite("output/skin.jpg", skin) 
 
 cv2.destroyAllWindows()
