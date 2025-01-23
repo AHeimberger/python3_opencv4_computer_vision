@@ -18,3 +18,6 @@ __pycache__
 chapter07/CarData.tar.gz
 chapter07/CarData.tar
 chapter07/CarData
+
+.venv
+**/output
