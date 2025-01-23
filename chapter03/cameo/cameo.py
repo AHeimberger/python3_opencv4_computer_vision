@@ -1,3 +1,4 @@
+import os
 import cv2
 import filters
 from managers import WindowManager, CaptureManager
@@ -5,10 +6,8 @@ from managers import WindowManager, CaptureManager
 class Cameo(object):
 
     def __init__(self):
-        self._windowManager = WindowManager('Cameo',
-                                            self.onKeypress)
-        self._captureManager = CaptureManager(
-            cv2.VideoCapture(0), self._windowManager, True)
+        self._windowManager = WindowManager('Cameo', self.onKeypress)
+        self._captureManager = CaptureManager(cv2.VideoCapture(0), self._windowManager, True)
         self._curveFilter = filters.BGRPortraCurveFilter()
 
     def run(self):
@@ -33,16 +32,15 @@ class Cameo(object):
         escape -> Quit.
 
         """
+        if not os.path.exists("output"):
+            os.mkdir("output")
+
         if keycode == 32: # space
-            self._captureManager.writeImage('screenshot.png')
+            self._captureManager.writeImage('output/screenshot.png')
         elif keycode == 9: # tab
             if not self._captureManager.isWritingVideo:
-                self._captureManager.startWritingVideo(
-                    'screencast.avi')
+                self._captureManager.startWritingVideo('output/screencast.avi')
             else:
                 self._captureManager.stopWritingVideo()
         elif keycode == 27: # escape
             self._windowManager.destroyWindow()
-
-if __name__=="__main__":
-    Cameo().run()
