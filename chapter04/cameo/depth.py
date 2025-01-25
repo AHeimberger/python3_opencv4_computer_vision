@@ -1,6 +1,8 @@
 import numpy
 
-
+# function whose values are 0 for rejected regions of the image
+# and 255 for accepted regions - takes in a disparity map and
+# a valid depth mask 
 def createMedianMask(disparityMap, validDepthMask, rect = None):
     """Return a mask selecting the median layer, plus shadows."""
     if rect is not None:
@@ -8,6 +10,5 @@ def createMedianMask(disparityMap, validDepthMask, rect = None):
         disparityMap = disparityMap[y:y+h, x:x+w]
         validDepthMask = validDepthMask[y:y+h, x:x+w]
     median = numpy.median(disparityMap)
-    return numpy.where((validDepthMask == 0) | \
-                       (abs(disparityMap - median) < 12),
-                       255, 0).astype(numpy.uint8)
+    return numpy.where((validDepthMask == 0) |
+                       (abs(disparityMap - median) < 12), 255, 0).astype(numpy.uint8)
