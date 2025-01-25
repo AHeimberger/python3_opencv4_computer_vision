@@ -11,8 +11,7 @@ class CaptureManager(object):
 
         self.previewWindowManager = previewWindowManager
         self.shouldMirrorPreview = shouldMirrorPreview
-        self.shouldConvertBitDepth10To8 = \
-                shouldConvertBitDepth10To8
+        self.shouldConvertBitDepth10To8 = shouldConvertBitDepth10To8
 
         self._capture = capture
         self._channel = 0
@@ -45,8 +44,7 @@ class CaptureManager(object):
             if self.shouldConvertBitDepth10To8 and \
                     self._frame is not None and \
                     self._frame.dtype == numpy.uint16:
-                self._frame = (self._frame >> 2).astype(
-                        numpy.uint8)
+                self._frame = (self._frame >> 2).astype(numpy.uint8)
         return self._frame
 
     @property

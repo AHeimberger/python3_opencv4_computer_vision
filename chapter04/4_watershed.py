@@ -3,22 +3,26 @@ import cv2
 from matplotlib import pyplot as plt
 
 img = cv2.imread('../images/5_of_diamonds.png')
+# img = cv2.imread('../images/water_coins.jpg')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-ret, thresh = cv2.threshold(gray, 0, 255,
-                            cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
+ret, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
 
 # Remove noise.
 kernel = np.ones((3,3), np.uint8)
-opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel,
-                           iterations=2)
+
+# morphology constist of dilating (expanding) or erording (contracting)
+# morphology open makes big white regions swallow up little black regions (noise)
+# while leaving big black regions relatevly unchanged
+opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=2)
 
 # Find the sure background region.
 sure_bg = cv2.dilate(opening, kernel, iterations=3)
 
 # Find the sure foreground region.
 dist_transform = cv2.distanceTransform(opening, cv2.DIST_L2, 5)
-ret, sure_fg = cv2.threshold(
-        dist_transform, 0.7 * dist_transform.max(), 255, 0)
+
+# Apply threshold to separate background from foreground
+ret, sure_fg = cv2.threshold(dist_transform, 0.7 * dist_transform.max(), 255, 0)
 sure_fg = sure_fg.astype(np.uint8)
 
 # Find the unknown region.
@@ -35,6 +39,15 @@ markers[unknown==255] = 0
 
 markers = cv2.watershed(img, markers)
 img[markers==-1] = [255, 0, 0]
+
+plt.imshow(cv2.cvtColor(thresh, cv2.COLOR_BGR2RGB))
+plt.show()
+
+plt.imshow(cv2.cvtColor(sure_bg, cv2.COLOR_BGR2RGB))
+plt.show()
+
+plt.imshow(cv2.cvtColor(sure_fg, cv2.COLOR_BGR2RGB))
+plt.show()
 
 plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
 plt.show()
