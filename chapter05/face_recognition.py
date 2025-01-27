@@ -31,12 +31,6 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# ------------------------------------------------------------------------------------------------
-# Note:
-# When using the FaceRecognizer interface in combination with Python, please stick to Python 2.
-# Some underlying scripts like create_csv will not work in other versions, like Python 3.
-# ------------------------------------------------------------------------------------------------
-
 import os
 import sys
 import cv2
@@ -105,7 +99,7 @@ if __name__ == "__main__":
     # the tutorial coming with this source code on how to prepare
     # your image data:
     if len(sys.argv) < 2:
-        print("USAGE: facerec_demo.py </path/to/images> [</path/to/store/images/at>]")
+        print("USAGE: face_recognition.py </path/to/images> [</path/to/store/images/at>]")
         sys.exit()
     # Now read in the image data. This must be a valid path!
     [X,y] = read_images(sys.argv[1])
@@ -120,7 +114,7 @@ if __name__ == "__main__":
     # Create the Eigenfaces model. We are going to use the default
     # parameters for this simple example, please read the documentation
     # for thresholding:
-    model = cv2.face.createEigenFaceRecognizer()
+    model = cv2.face.EigenFaceRecognizer_create()
     # Read
     # Learn the model. Remember our function returns Python lists,
     # so we use np.asarray to turn them into NumPy lists to make
@@ -139,15 +133,9 @@ if __name__ == "__main__":
     print("Predicted label = %d (confidence=%.2f)" % (p_label, p_confidence))
     # Cool! Finally we'll plot the Eigenfaces, because that's
     # what most people read in the papers are keen to see.
-    #
-    # Just like in C++ you have access to all model internal
-    # data, because the cv::FaceRecognizer is a cv::Algorithm.
-    #
-    # You can see the available parameters with getParams():
-    print(model.getParams())
     # Now let's get some data:
-    mean = model.getMat("mean")
-    eigenvectors = model.getMat("eigenvectors")
+    mean = model.getMean()
+    eigenvectors = model.getEigenVectors()
     # We'll save the mean, by first normalizing it:
     mean_norm = normalize(mean, 0, 255, dtype=np.uint8)
     mean_resized = mean_norm.reshape(X[0].shape)
@@ -159,7 +147,7 @@ if __name__ == "__main__":
     # images. You could also use cv::normalize here, but sticking
     # to NumPy is much easier for now.
     # Note: eigenvectors are stored by column:
-    for i in xrange(min(len(X), 16)):
+    for i in range(min(len(X), 16)):
         eigenvector_i = eigenvectors[:,i].reshape(X[0].shape)
         eigenvector_i_norm = normalize(eigenvector_i, 0, 255, dtype=np.uint8)
         # Show or save the images:
