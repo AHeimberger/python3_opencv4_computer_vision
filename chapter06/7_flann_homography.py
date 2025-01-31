@@ -4,10 +4,8 @@ from matplotlib import pyplot as plt
 
 MIN_NUM_GOOD_MATCHES = 10
 
-img0 = cv2.imread('../images/tattoos/query.png',
-                  cv2.IMREAD_GRAYSCALE)
-img1 = cv2.imread('../images/tattoos/anchor-man.png',
-                  cv2.IMREAD_GRAYSCALE)
+img0 = cv2.imread('../images/tattoos/query.png', cv2.IMREAD_GRAYSCALE)
+img1 = cv2.imread('../images/tattoos/anchor-man.png', cv2.IMREAD_GRAYSCALE)
 
 # Perform SIFT feature detection and description.
 sift = cv2.SIFT_create()
@@ -39,8 +37,7 @@ if len(good_matches) >= MIN_NUM_GOOD_MATCHES:
     mask_matches = mask.ravel().tolist()
 
     h, w = img0.shape
-    src_corners = np.float32(
-        [[0, 0], [0, h-1], [w-1, h-1], [w-1, 0]]).reshape(-1, 1, 2)
+    src_corners = np.float32([[0, 0], [0, h-1], [w-1, h-1], [w-1, 0]]).reshape(-1, 1, 2)
     dst_corners = cv2.perspectiveTransform(src_corners, M)
     dst_corners = dst_corners.astype(np.int32)
 

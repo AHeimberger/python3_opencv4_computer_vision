@@ -5,8 +5,7 @@ import cv2
 
 # Read the query image.
 folder = '../images/tattoos'
-query = cv2.imread(os.path.join(folder, 'query.png'),
-                   cv2.IMREAD_GRAYSCALE)
+query = cv2.imread(os.path.join(folder, 'query.png'), cv2.IMREAD_GRAYSCALE)
 
 # create files, images, descriptors globals
 files = []

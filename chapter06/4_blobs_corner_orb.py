@@ -2,10 +2,8 @@ import cv2
 from matplotlib import pyplot as plt
 
 # Load the images.
-img0 = cv2.imread('../images/nasa_logo.png',
-                  cv2.IMREAD_GRAYSCALE)
-img1 = cv2.imread('../images/kennedy_space_center.jpg',
-                  cv2.IMREAD_GRAYSCALE)
+img0 = cv2.imread('../images/nasa_logo.png', cv2.IMREAD_GRAYSCALE)
+img1 = cv2.imread('../images/kennedy_space_center.jpg', cv2.IMREAD_GRAYSCALE)
 
 # Perform ORB feature detection and description.
 orb = cv2.ORB_create()
