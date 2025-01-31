@@ -1,4 +1,5 @@
 import cv2
+import os
 
 OPENCV_MAJOR_VERSION = int(cv2.__version__.split('.')[0])
 OPENCV_MINOR_VERSION = int(cv2.__version__.split('.')[1])
@@ -17,8 +18,7 @@ img = cv2.imread('../images/haying.jpg')
 if OPENCV_MAJOR_VERSION >= 5 or \
         (OPENCV_MAJOR_VERSION == 4 and OPENCV_MINOR_VERSION >= 6):
     # OpenCV 4.6 or a later version is being used.
-    found_rects, found_weights = hog.detectMultiScale(
-        img, winStride=(4, 4), scale=1.02, groupThreshold=1.9)
+    found_rects, found_weights = hog.detectMultiScale(img, winStride=(4, 4), scale=1.02, groupThreshold=1.9)
 else:
     # OpenCV 4.5 or an earlier version is being used.
     # The groupThreshold parameter used to be named finalThreshold.
@@ -42,6 +42,9 @@ for ri, r in enumerate(found_rects_filtered):
     cv2.putText(img, text, (x, y - 20),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
 
+if not os.path.exists("output"):
+    os.mkdir("output")
+
 cv2.imshow('Women in Hayfield Detected', img)
-cv2.imwrite('./women_in_hayfield_detected.png', img)
+cv2.imwrite('./output/women_in_hayfield_detected.png', img)
 cv2.waitKey(0)
