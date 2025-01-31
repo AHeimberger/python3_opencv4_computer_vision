@@ -2,10 +2,8 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
-img0 = cv2.imread('../images/gauguin_entre_les_lys.jpg',
-                  cv2.IMREAD_GRAYSCALE)
-img1 = cv2.imread('../images/gauguin_paintings.png',
-                  cv2.IMREAD_GRAYSCALE)
+img0 = cv2.imread('../images/gauguin_entre_les_lys.jpg', cv2.IMREAD_GRAYSCALE)
+img1 = cv2.imread('../images/gauguin_paintings.png', cv2.IMREAD_GRAYSCALE)
 
 # Perform SIFT feature detection and description.
 sift = cv2.SIFT_create()
@@ -13,6 +11,7 @@ kp0, des0 = sift.detectAndCompute(img0, None)
 kp1, des1 = sift.detectAndCompute(img1, None)
 
 # Define FLANN-based matching parameters.
+# kernel density tree
 FLANN_INDEX_KDTREE = 1
 index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
 search_params = dict(checks=50)
