@@ -1,8 +1,6 @@
 import cv2
 import numpy as np
 
-OPENCV_MAJOR_VERSION = int(cv2.__version__.split('.')[0])
-
 class Pedestrian():
     """A tracked pedestrian with a state including an ID, tracking
     window, histogram, and Kalman filter.
@@ -111,17 +109,7 @@ def main():
         cv2.dilate(thresh, dilate_kernel, thresh, iterations=2)
 
         # Detect contours in the thresholded image.
-        if OPENCV_MAJOR_VERSION >= 4:
-            # OpenCV 4 or a later version is being used.
-            contours, hier = cv2.findContours(
-                thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        else:
-            # OpenCV 3 or an earlier version is being used.
-            # cv2.findContours has an extra return value.
-            # The extra return value is the thresholded image, which
-            # is unchanged, so we can ignore it.
-            _, contours, hier = cv2.findContours(
-                thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hier = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 

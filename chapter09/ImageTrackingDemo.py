@@ -611,7 +611,6 @@ class ImageTrackingDemo():
 
 
 def main():
-
     capture = cv2.VideoCapture(0)
     capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)

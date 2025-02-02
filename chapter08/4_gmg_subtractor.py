@@ -1,34 +1,26 @@
 import cv2
 
-OPENCV_MAJOR_VERSION = int(cv2.__version__.split('.')[0])
-
 bg_subtractor = cv2.bgsegm.createBackgroundSubtractorGMG()
+# bg_subtractor = cv2.bgsegm.createBackgroundSubtractorCNT()
+# bg_subtractor = cv2.bgsegm.createBackgroundSubtractorGSOC()
+# bg_subtractor = cv2.bgsegm.createBackgroundSubtractorLSBP()
+# bg_subtractor = cv2.bgsegm.createBackgroundSubtractorMOG()
 
 erode_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (13, 9))
 dilate_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 11))
 
 cap = cv2.VideoCapture('../videos/traffic.flv')
+# cap = cv2.VideoCapture(0)
+
 success, frame = cap.read()
 while success:
-
     fg_mask = bg_subtractor.apply(frame)
 
     _, thresh = cv2.threshold(fg_mask, 244, 255, cv2.THRESH_BINARY)
     cv2.erode(thresh, erode_kernel, thresh, iterations=2)
     cv2.dilate(thresh, dilate_kernel, thresh, iterations=2)
 
-    if OPENCV_MAJOR_VERSION >= 4:
-        # OpenCV 4 or a later version is being used.
-        contours, hier = cv2.findContours(thresh, cv2.RETR_EXTERNAL,
-                                          cv2.CHAIN_APPROX_SIMPLE)
-    else:
-        # OpenCV 3 or an earlier version is being used.
-        # cv2.findContours has an extra return value.
-        # The extra return value is the thresholded image, which is
-        # unchanged, so we can ignore it.
-        _, contours, hier = cv2.findContours(thresh, cv2.RETR_EXTERNAL,
-                                             cv2.CHAIN_APPROX_SIMPLE)
-
+    contours, hier = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     for c in contours:
         if cv2.contourArea(c) > 1000:
             x, y, w, h = cv2.boundingRect(c)

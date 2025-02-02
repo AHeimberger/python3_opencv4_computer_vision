@@ -1,5 +1,5 @@
-opencv-python
-opencv-contrib-python
-numpy
-matplotlib
-scipy
+opencv-contrib-python==4.11.0.86
+opencv-python==4.11.0.86
+numpy==2.2.2
+matplotlib==3.10.0
+scipy==1.15.1

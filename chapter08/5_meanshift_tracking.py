@@ -1,5 +1,6 @@
 import cv2
-import numpy as np
+
+red = (0, 0, 255)
 
 cap = cv2.VideoCapture(0)
 
@@ -11,7 +12,7 @@ if not success:
 
 # Define an initial tracking window in the center of the frame.
 frame_h, frame_w = frame.shape[:2]
-w = frame_w//8
+w = frame_w//8     # divide and round // , vs / float
 h = frame_h//8
 x = frame_w//2 - w//2
 y = frame_h//2 - h//2
@@ -35,17 +36,15 @@ while success:
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     back_proj = cv2.calcBackProject([hsv], [0], roi_hist, [0, 180], 1)
 
-    # Perform tracking with CamShift.
-    rotated_rect, track_window = cv2.CamShift(
-        back_proj, track_window, term_crit)
+    # Perform tracking with MeanShift.
+    num_iters, track_window = cv2.meanShift(back_proj, track_window, term_crit)
 
     # Draw the tracking window.
-    box_points = cv2.boxPoints(rotated_rect)
-    box_points = np.int0(box_points)
-    cv2.polylines(frame, [box_points], True, (255, 0, 0), 2)
+    x, y, w, h = track_window
+    cv2.rectangle(frame, (x, y), (x+w, y+h), red, 2)
 
     cv2.imshow('back-projection', back_proj)
-    cv2.imshow('camshift', frame)
+    cv2.imshow('meanshift', frame)
 
     k = cv2.waitKey(1)
     if k == 27:  # Escape

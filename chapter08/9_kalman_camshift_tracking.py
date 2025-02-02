@@ -64,7 +64,7 @@ while success:
 
     kalman.predict()
     box_points = cv2.boxPoints(rotated_rect)
-    box_points = np.int0(box_points)
+    box_points = np.intp(box_points)
     (cx, cy), radius = cv2.minEnclosingCircle(box_points)
     center = np.array([cx, cy], np.float32)
     estimate = kalman.correct(center)
